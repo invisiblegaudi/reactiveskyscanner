@@ -8,7 +8,7 @@ const TopNav = () => (
       <span className='logoText'>Skyscanner</span>
       <img className='logo' alt="Skyscanner" src={logo}/>
     </a>
-     // TODO burger menu icon
+    <a href="#" className='glyphicon glyphicon-menu-hamburger'></a>
   </header>
 );
 

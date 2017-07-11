@@ -57,7 +57,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-//        include: [paths.appSrc, paths.appNodeModules],
+//        include: [paths.appSrc, paths.appNodeModules],  // disbled as preventing bootstrap styles from loading
         loader: 'style!css!postcss'
       },
       {
@@ -73,7 +73,7 @@ module.exports = {
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?.*)?$/,
         exclude: [BACKPACK],
-//        include: [paths.appSrc, paths.appNodeModules],
+//        include: [paths.appSrc, paths.appNodeModules], // disbled as preventing bootstrap styles from loading
         loader: 'file',
         query: {
           name: 'static/media/[name].[ext]'
