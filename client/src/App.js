@@ -3,13 +3,14 @@ import './App.scss';
 
 import TopNav from './components/topnav';
 import Controls from './components/controls';
+import Header from './components/header';
 
 class App extends Component {
   render() {
     return (
       <div className="App container-fluid">
         <TopNav/>
-        // TODO header
+	<Header/>
 	<Controls/>
         // TODO results component
       </div>

@@ -1,4 +1,5 @@
 @import "~bpk-mixins";
+@import "../../global.scss";
 
 .header {
   display: flex;
@@ -11,7 +12,7 @@
 }
 
 a.glyphicon {
-    color:#00B2D6;
+    color:$skyscanner-blue;
 }
 
 .logo {
