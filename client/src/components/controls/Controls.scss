@@ -1,10 +1,12 @@
+@import '../../global.scss';
+
+
 .Controls {
 
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: .7rem;
     
     #price-alerts .glyphicon, a {
-	color:#00B2D6;
+	color:$skyscanner-blue;
     }
 
     #price-alerts i {
