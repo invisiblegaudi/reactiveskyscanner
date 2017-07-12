@@ -1,4 +1,5 @@
 import React from 'react';
+import './Controls.scss';
 
 const Controls = () => (
     <div className="Controls row">    

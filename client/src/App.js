@@ -4,6 +4,7 @@ import './App.scss';
 import TopNav from './components/topnav';
 import Controls from './components/controls';
 import Header from './components/header';
+import Results from './components/results';
 
 class App extends Component {
   render() {
@@ -12,7 +13,7 @@ class App extends Component {
         <TopNav/>
 	<Header/>
 	<Controls/>
-        // TODO results component
+	<Results/>
       </div>
     );
   }
