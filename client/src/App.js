@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import './App.scss';
 
 import TopNav from './components/topnav';
+import Controls from './components/controls';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="App container-fluid">
         <TopNav/>
         // TODO header
-        // TODO placeholder controls
+	<Controls/>
         // TODO results component
       </div>
     );
