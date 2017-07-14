@@ -1,7 +1,8 @@
 const chai = require('chai'),
       chaiHttp = require('chai-http'),
       should = chai.should(),
-      fs = require('fs');
+      fs = require('fs'),
+      moment = require('moment');
 
 
 process.env.APIKEY = 'ss630745725358065467897349852985';
@@ -40,18 +41,18 @@ it('connects to the api and gets a validation error', function(done) {
 });
 
 it('connects to the api and gets results', function(done) {
-
+  this.timeout(5000);
   const app = require('../server/src/server');
-  let od = new Date();
-  let  OutboundDate = `${od.getYear()}-${od.getMonth()}-${od.getDay()}`
-  
+  let  OutboundDate = moment().format('YYYY-MM-DD');
   chai.use(chaiHttp);
   chai.request(app)
-	     .get('/api/search?OriginPlace=edi&DestinationPlace=lon&OutboundDate=${OutboundDate}&CabinClass=Economy')
-	     .end( async function(err, res) {
-	       res.should.have.status(200);
-        res.body.should.be.json();
-	       app.close();
-	       done();
-	     });
+ 	    .get(`/api/search?fromPlace=edi&toPlace=stn&fromDate=${OutboundDate}&class=Economy`)
+ 	    .end(function(err, res) {        
+ 	      res.should.have.status(200);
+        res.body.should.not.be.empty;
+        res.body.Status.should.equal('UpdatesComplete');
+        res.body.Agents.should.exist;
+ 	      app.close();
+        done()
+ 	    });
 });
