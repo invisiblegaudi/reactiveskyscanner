@@ -12,9 +12,11 @@
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-plugin-transform-react-constant-elements": "6.9.1",
     "babel-plugin-transform-runtime": "6.12.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "6.9.0",
     "babel-preset-es2016": "6.11.3",
     "babel-preset-react": "6.11.1",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-runtime": "6.11.6",
     "case-sensitive-paths-webpack-plugin": "1.1.2",
     "chai": "^4.1.0",
@@ -66,7 +68,8 @@
   "scripts": {
     "client": "cd client && node ./scripts/start.js",
     "build": "cd client && node ./scripts/build.js",
-    "server": "cd server && node src/server.js"
+    "server": "cd server && node src/server.js",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill"    
   },
   "eslintConfig": {
     "extends": "./eslint.js"
