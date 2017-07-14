@@ -1,0 +1,79 @@
+$turquoise-green:#00FF73;
+$button-corner-radius:5em;
+
+.Results {
+    background-color:#eee;
+
+    .result {
+	background-color:#fff;
+	border-radius: 0.5rem;
+	box-shadow:10rem;
+	padding:.2rem;
+	margin:.5rem;
+	
+	img.airline-logo {
+	    height:28px;
+	    width:28px;
+	}
+
+	button.select {
+	    background-color:$turquoise-green;
+	    -moz-border-radius: $button-corner-radius;
+	    -webkit-border-radius: $button-corner-radius;
+	    border-radius: $button-corner-radius;
+	    -khtml-border-radius: $button-corner-radius;
+	    color:#fff;
+	    width:6.5rem;
+	    padding:.2rem 1rem;
+	    margin-top:2rem;
+	    font-weight:bold;
+	    background-image:
+	    linear-gradient(
+		#00D674,
+		#00BE69
+	    );
+	    border:1px solid #7ADCB0;
+	}
+
+	.flight-type {
+	    color:$turquoise-green;
+	}
+
+	.time {
+	    font-weight:bold;
+	}
+
+	.departure {
+	    width:100%
+	}
+
+	.arrow {
+	    padding-top:.7rem;
+	}
+
+	.arrow, .country-code {
+	    color: #aaa;
+	}
+	
+	.summary {
+	    font-size:.8rem;
+	    padding-right: 0;
+	    text-align: right;
+	}
+
+	.bottom {
+	    padding:0 2rem 0 1rem;
+	}
+
+	h3.price-total {
+	    font-size:2rem;
+	    margin-bottom:0;
+	}
+
+	h5.seller {
+	    font-size:1rem;
+	    color:#aaa;
+	    margin-top:0;
+	}
+    }
+}
