@@ -44,7 +44,7 @@ it('connects to the api and gets a validation error', function(done) {
 });
 
 it('connects to the api and gets results', function(done) {
-  this.timeout(5000);
+  this.timeout(60000);
   const server = require('../server/src/server');
   const app = server.app, api = server.api;
   api.livePricing.search = sinon.stub();
@@ -57,12 +57,12 @@ it('connects to the api and gets results', function(done) {
  	    .then(res=> {
  	      res.should.have.status(200);
         res.body.should.not.be.empty;
-        res.body.Status.should.equal('UpdatesComplete');
-        res.body.Agents.should.exist;
+        res.body.length.should.equal(445);
+        res.body[444].leg.outbound.segments.length.should.equal(6);
  	      app.close();
         done();
  	    })
       .catch(e=>{
-        console.error(Object.keys(e),e.response)
+        console.error(e);
       });
 });
