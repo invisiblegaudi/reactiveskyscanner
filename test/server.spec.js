@@ -7,7 +7,6 @@ const chai = require('chai'),
       mockResults = require('./__mocks/results.json');
 
 
-process.env.APIKEY = 'ss630745725358065467897349852985';
 process.env.NODE_ENV = 'test';
 
 it('can start the server and get a response', function(done) {
