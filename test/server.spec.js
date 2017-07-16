@@ -48,7 +48,7 @@ it('connects to the api and gets results', function(done) {
   const server = require('../server/src/server');
   const app = server.app, api = server.api;
   api.livePricing.search = sinon.stub();
-  api.livePricing.search.returns(Promise.resolve(JSON.parse(mockResults)))
+  api.livePricing.search.returns(Promise.resolve(mockResults))
   let  outboundDate = moment().add(1,'months').format('YYYY-MM-DD');
   let  inboundDate = moment().add(2,'months').format('YYYY-MM-DD');
   chai.use(chaiHttp);
