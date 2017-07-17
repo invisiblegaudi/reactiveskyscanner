@@ -1,0 +1,15 @@
+{
+  "required" : ["fromPlace","toPlace","fromDate","class"],
+  "properties" : {
+	  "fromPlace" :{"type":"string","pattern":"[a-z]+","minLength":3,"maxLength":3},
+	  "toPlace" :{"type":"string","pattern":"[a-z]+","minLength":3,"maxLength":3},
+	  "fromDate" :{"type":"string","format":"date"},
+	  "toDate" :{"type":"string","format":"date"},
+	  "adults" :{
+      "type":"number"
+    },
+    "class" :{
+      "type":"string", "enum": ["Economy", "PremiumEconomy","Business", "First"]
+    }
+  }
+}
