@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Results.scss';
+import Rx from 'rx-lite';
 import moment from 'moment';
 
 class Logo extends Component {
@@ -85,10 +86,27 @@ class Results extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {data:[]}        
   }
   
+  componentWillMount() {
+    
+    let  fromDate = moment().add(1,'months').format('YYYY-MM-DD');
+    let  toDate = moment().add(2,'months').format('YYYY-MM-DD');
+
+    const getFlights = (outboundDate,inboundDate) =>
+      fetch(`http://localhost:4000/api/search?fromPlace=edi&toPlace=syd&fromDate=${outboundDate}&toDate=${inboundDate}&class=Economy`)
+        .then(res => res.json())
+        .catch(err => console.error);
+
+    Rx.Observable.fromPromise(getFlights(fromDate,toDate))
+      .forEach(result=>this.setState({data:result}));
+    
+  };
+
   render() {
-    let resultList = this.props.results.map((flight,i)=>{      
+    console.log(this.state.data);
+    let resultList = this.state.data.map((flight,i)=>{      
       return <Result flight={flight}/>
     });
     
