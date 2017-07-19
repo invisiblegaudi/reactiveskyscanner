@@ -25,10 +25,10 @@ app.get('/api/search', (req, res) => {
 
   schema.search.properties.fromDate.formatMinimum =
     schema.search.properties.toDate.formatMinimum =
-      moment().format('YYYY-MM-DD'); // no historical searches
+      moment().format('YYYY-MM-DD'); // query validation: no historical searches
   
-  let validate = ajv.compile(schema.search);
-  var valid = validate(req.query);
+  let validate = ajv.compile(schema.search); // load query parameter validation rules
+  var valid = validate(req.query);  // validate query
   if (!valid)
     return res.status(400).send(validate.errors);
 
@@ -81,7 +81,7 @@ app.get('/api/search', (req, res) => {
          })
          return Itinerary;
        });
-       return res.json(resultsRelational);
+       return res.json({resultsRelational,query:results.Query});
      })
      .catch(e=>{
        let err = process.env.NODE_ENV === 'test' ||
