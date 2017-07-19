@@ -57,8 +57,9 @@ app.get('/api/search', (req, res) => {
            leg.originCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.OriginStation).ParentId);
            leg.destinationCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.DestinationStation).ParentId);
 
-           let durationHrs = moment.duration(leg.Duration, 'minutes').asHours();
-           leg.durationHrs = moment(durationHrs, 'hours').format("h mm");
+           let durationHrs = moment.duration(leg.Duration, 'hours');
+           leg.durationHrs = (durationHrs.hours()?durationHrs.hours()+'h ':'')
+                           + durationHrs.hours()+'m';
            
            if(leg.Id===Itinerary.OutboundLegId) {
              outbound = leg;
@@ -81,7 +82,13 @@ app.get('/api/search', (req, res) => {
          })
          return Itinerary;
        });
-       return res.json({results:resultsRelational,query:results.Query});
+       let query = {
+         origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code,
+         destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code,
+         travellers:results.Query.Children+results.Query.Adults,
+         cabinClass:results.Query.CabinClass
+       }
+       return res.json({results:resultsRelational,query});
      })
      .catch(e=>{
        let err = process.env.NODE_ENV === 'test' ||

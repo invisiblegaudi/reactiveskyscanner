@@ -1,8 +1,8 @@
 {
   "required" : ["fromPlace","toPlace","fromDate","class"],
   "properties" : {
-	  "fromPlace" :{"type":"string","pattern":"[a-z]+","minLength":3,"maxLength":3},
-	  "toPlace" :{"type":"string","pattern":"[a-z]+","minLength":3,"maxLength":3},
+	  "fromPlace" :{"type":"string","pattern":"[A-Za-z]+(-sky)?","minLength":3,"maxLength":8},
+	  "toPlace" :{"type":"string","pattern":"[A-Za-z]+(-sky)?","minLength":3,"maxLength":8},
 	  "fromDate" :{"type":"string","format":"date"},
 	  "toDate" :{"type":"string","format":"date"},
 	  "adults" :{

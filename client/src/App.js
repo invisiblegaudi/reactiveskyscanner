@@ -11,7 +11,7 @@ import Results from './components/results';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {results:[]}        
+    this.state = {results:[],query:{}}        
   }
   
   componentWillMount() {
@@ -20,9 +20,9 @@ class App extends Component {
     let  toDate = moment().add(2,'months').format('YYYY-MM-DD');
 
     const getFlights = (outboundDate,inboundDate) =>
-      fetch(`http://localhost:4000/api/search?fromPlace=edi&toPlace=syd&fromDate=${outboundDate}&toDate=${inboundDate}&class=Economy`)
+      fetch(`http://localhost:4000/api/search?fromPlace=EDI-sky&toPlace=LOND-sky&fromDate=${outboundDate}&toDate=${inboundDate}&class=Economy`)
         .then(res => res.json())
-        .catch(err => console.error);
+        .catch(console.error);
 
     Rx.Observable.fromPromise(getFlights(fromDate,toDate))
       .forEach(search=>this.setState({results:search.results,query:search.query}));
@@ -30,11 +30,10 @@ class App extends Component {
   };
 
   render() {
-      console.log(this.state.results);
     return (
       <div className="App container-fluid">
       <TopNav/>
-	     <Header/>
+	     <Header query={this.state.query} />
 	     <Controls/>
 	     <Results flights={this.state.results}/>
       </div>

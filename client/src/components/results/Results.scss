@@ -4,6 +4,11 @@ $button-corner-radius:5em;
 .Results {
     background-color:#eee;
 
+    .message {
+	display:block;
+	text-align:center;		    
+    }
+
     .result {
 	background-color:#fff;
 	border-radius: 0.5rem;

@@ -74,8 +74,8 @@ app.get('/api/search', function (req, res) {
           }).ParentId;
         });
 
-        var durationHrs = moment.duration(leg.Duration, 'minutes').asHours();
-        leg.durationHrs = moment(durationHrs, 'hours').format("h mm");
+        var durationHrs = moment.duration(leg.Duration, 'hours');
+        leg.durationHrs = (durationHrs.hours() ? durationHrs.hours() + 'h ' : '') + durationHrs.hours() + 'm';
 
         if (leg.Id === Itinerary.OutboundLegId) {
           outbound = leg;
@@ -97,7 +97,17 @@ app.get('/api/search', function (req, res) {
       });
       return Itinerary;
     });
-    return res.json({ results: resultsRelational, query: results.Query });
+    var query = {
+      origin: results.Places.find(function (place) {
+        return place.Id === parseInt(results.Query.OriginPlace);
+      }).Code,
+      destination: results.Places.find(function (place) {
+        return place.Id === parseInt(results.Query.DestinationPlace);
+      }).Code,
+      travellers: results.Query.Children + results.Query.Adults,
+      cabinClass: results.Query.CabinClass
+    };
+    return res.json({ results: resultsRelational, query: query });
   }).catch(function (e) {
     var err = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development' ? { error: e.message } : 'internal server error';
 

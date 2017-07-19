@@ -43,7 +43,7 @@ class Result extends Component {
     const flight = this.props.flight;
     const outbound = this.props.flight.leg.outbound;
     const inbound = this.props.flight.leg.inbound;
-    
+//    console.log(flight)
     return (
       <div className="result row" key={flight.OutboundLegId+flight.InboundLegId}>
       <Journey
@@ -58,18 +58,18 @@ class Result extends Component {
       />
       <Journey
       stops={inbound.Stops}
-      logoSrc={inbound.carrierDetails.imageUrl}
+      logoSrc={inbound.carrierDetails.ImageUrl}
       carrier={inbound.carrierDetails.Name}
       origin={inbound.originCity.Code}
       destination={inbound.destinationCity.Code}
       duration={inbound.durationHrs}
       departure={moment(outbound.Departure).format('HH:MM')}
-      arrival={moment(outbound.Arrival).format('HH:MM')} />
+      arrival={moment(outbound.Arrival).format('HH:MM')}
       />
       <div className="row bottom">
       <div className="col-xs-6">
       <h3 className="price-total">£{Math.round(flight.priceLowest)}</h3>
-      <h5 className="seller">flight.agent.Name</h5>
+      <h5 className="seller">{flight.agent.Name}</h5>
       </div>
       <div className="col-xs-3  col-xs-offset-2 "><button type="button" className="select">Select</button></div>
       </div>
@@ -83,14 +83,18 @@ class Result extends Component {
 class Results extends Component {
 
   render() {
-    let resultList = this.props.flights.map((flight,i)=>{      
-      return <Result flight={flight} key={i}/>
-    });
+    
+    let errorNoResults = 'There were no results available, please try another search or check your network settings';
+
+    let resultList = this.props.flights ?
+                     this.props.flights.map((flight,i)=>{      
+                       return <Result flight={flight} key={i}/>
+                     }) : <span className="message">{errorNoResults}</span>
     
     return (
       <div className="Results">
       {resultList}
-    </div>
+      </div>
     )
   }
 
