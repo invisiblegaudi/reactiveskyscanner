@@ -27,10 +27,10 @@ app.get('/', function (req, res) {
 
 app.get('/api/search', function (req, res) {
 
-  schema.search.properties.fromDate.formatMinimum = schema.search.properties.toDate.formatMinimum = moment().format('YYYY-MM-DD'); // no historical searches
+  schema.search.properties.fromDate.formatMinimum = schema.search.properties.toDate.formatMinimum = moment().format('YYYY-MM-DD'); // validaton: no historical searches
 
   var validate = ajv.compile(schema.search); // load query parameter validation rules
-  var valid = validate(req.query);
+  var valid = validate(req.query); // validate query
   if (!valid) return res.status(400).send(validate.errors);
 
   api.livePricing.search(_extends({}, req.query)).then(function (results) {
@@ -97,7 +97,7 @@ app.get('/api/search', function (req, res) {
       });
       return Itinerary;
     });
-    return res.json(resultsRelational);
+    return res.json({ results: resultsRelational, query: results.Query });
   }).catch(function (e) {
     var err = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development' ? { error: e.message } : 'internal server error';
 

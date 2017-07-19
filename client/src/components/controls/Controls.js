@@ -6,7 +6,7 @@ const Controls = () => (
     <a className="col-xs-2 text-center">Filter</a>
     <a className="col-xs-2 text-center">Sort</a>
     <span className="col-xs-5 col-xs-offset-3" id="price-alerts">
-    <i className="glyphicon glyphicon-bell"></i><a class="text">Price Alerts</a></span>
+    <i className="glyphicon glyphicon-bell"></i><a className="text">Price Alerts</a></span>
     </div>
 )
 
