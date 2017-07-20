@@ -35,68 +35,67 @@ app.get('/api/search', (req, res) => {
   
   api.livePricing.search({
     ...req.query
-  })
-     .then(results => {
-       let resultsRelational = results.Itineraries.map(Itinerary=>{
-         let {OutboundLegId,InboundLegId,PricingOptions} = Itinerary;
-         let priceLowestDetails = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b);
-         let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]);
-         let priceLowest = priceLowestDetails.Price;
-         return {
-           InboundLegId,
-           OutboundLegId,
-           PricingOptions,
-           priceLowest,
-           agent
-         };
-       }).map(Itinerary=>{
-         let outbound,inbound;
-         results.Legs.map(leg=>{
-           leg.carrierDetails = leg.Carriers.map(carrierId=>results.Carriers.find(carrier=>carrier.Id===carrierId))[0]; 
+  }).then(results => {
+    let Legs = results.Legs.map(leg=>{
+      leg.carrierDetails = leg.Carriers.map(carrierId=>results.Carriers.find(carrier=>carrier.Id===carrierId))[0]; 
 
-           leg.originCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.OriginStation).ParentId);
-           leg.destinationCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.DestinationStation).ParentId);
+      leg.originCitnoy = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.OriginStation).ParentId);
+      leg.destinationCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.DestinationStation).ParentId);
 
-           let durationHrs = moment.duration(leg.Duration, 'hours');
-           leg.durationHrs = (durationHrs.hours()?durationHrs.hours()+'h ':'')
-                           + durationHrs.hours()+'m';
-           
-           if(leg.Id===Itinerary.OutboundLegId) {
-             outbound = leg;
-           } else if(leg.Id===Itinerary.InboundLegId) {
-             inbound = leg;
-           }
-         })
-         return {...Itinerary,leg:{inbound,outbound}}
-       }).map(Itinerary=>{
-         Itinerary.leg.outbound.segments = Itinerary.leg.inbound.segments = [];
-         results.Segments.forEach(segment=>{
-           let matchingSegmentIndex = Itinerary.leg.outbound.SegmentIds.indexOf(segment.Id);
-           if(matchingSegmentIndex>=0) {
-             Itinerary.leg.outbound.segments.push(segment); 
-           } else {
-             matchingSegmentIndex = Itinerary.leg.inbound.SegmentIds.indexOf(segment.Id);
-             if(matchingSegmentIndex>=0)
-               Itinerary.leg.inbound.segments.push(segment); 
-           }
-         })
-         return Itinerary;
-       });
-       let query = {
-         origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code,
-         destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code,
-         travellers:results.Query.Children+results.Query.Adults,
-         cabinClass:results.Query.CabinClass
-       }
-       return res.json({results:resultsRelational,query});
-     })
-     .catch(e=>{
-       let err = process.env.NODE_ENV === 'test' ||
-                 process.env.NODE_ENV === 'development' ?
-                 {error:e.message} : 'internal server error';
+      let durationHrs = moment.duration(leg.Duration, 'hours');
+      leg.durationHrs = (durationHrs.hours()?durationHrs.hours()+'h ':'')
+                      + durationHrs.minutes()+'m';
 
-       return res.status(500).send(err);
-     });
+      return leg;
+
+    });
+
+    let resultsRelational = results.Itineraries.map(Itinerary=>{
+      let {OutboundLegId,InboundLegId,PricingOptions} = Itinerary;
+      let priceLowestDetails = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b);
+      let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]);
+      let priceLowest = priceLowestDetails.Price;
+      return {
+        InboundLegId,
+        OutboundLegId,
+        PricingOptions,
+        priceLowest,
+        agent,
+        leg:{
+          inbound:Legs.find(leg=>leg.Id===InboundLegId),
+          outbound:Legs.find(leg=>leg.Id===OutboundLegId)
+        }
+      };
+    }).map(Itinerary=>{
+      Itinerary.leg.outbound.segments = Itinerary.leg.inbound.segments = [];
+      results.Segments.forEach(segment=>{
+        let matchingSegmentIndex = Itinerary.leg.outbound.SegmentIds.indexOf(segment.Id);
+        if(matchingSegmentIndex>=0) {
+          Itinerary.leg.outbound.segments.push(segment); 
+        } else {
+          matchingSegmentIndex = Itinerary.leg.inbound.SegmentIds.indexOf(segment.Id);
+          if(matchingSegmentIndex>=0)
+            Itinerary.leg.inbound.segments.push(segment); 
+        }
+      })
+      return Itinerary;
+    });
+    let query = {
+      origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code,
+      destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code,
+      travellers:results.Query.Children+results.Query.Adults,
+      cabinClass:results.Query.CabinClass
+    }
+    console.log(query)
+
+    return res.json({results:resultsRelational,query});
+  }).catch(e=>{
+    let err = process.env.NODE_ENV === 'test' ||
+              process.env.NODE_ENV === 'development' ?
+              {error:e.message} : 'internal server error';
+
+    return res.status(500).send(err);
+  });
 });
 
 module.exports = { app: app.listen(4000, () => {

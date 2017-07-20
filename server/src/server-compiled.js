@@ -34,6 +34,28 @@ app.get('/api/search', function (req, res) {
   if (!valid) return res.status(400).send(validate.errors);
 
   api.livePricing.search(_extends({}, req.query)).then(function (results) {
+    var Legs = results.Legs.map(function (leg) {
+      leg.carrierDetails = leg.Carriers.map(function (carrierId) {
+        return results.Carriers.find(function (carrier) {
+          return carrier.Id === carrierId;
+        });
+      })[0];
+
+      leg.originCitnoy = results.Places.find(function (place) {
+        return place.Id === results.Places.find(function (place) {
+          return place.Id === leg.OriginStation;
+        }).ParentId;
+      });
+      leg.destinationCity = results.Places.find(function (place) {
+        return place.Id === results.Places.find(function (place) {
+          return place.Id === leg.DestinationStation;
+        }).ParentId;
+      });
+
+      var durationHrs = moment.duration(leg.Duration, 'hours');
+      leg.durationHrs = (durationHrs.hours() ? durationHrs.hours() + 'h ' : '') + durationHrs.minutes() + 'm';
+    });
+
     var resultsRelational = results.Itineraries.map(function (Itinerary) {
       var OutboundLegId = Itinerary.OutboundLegId,
           InboundLegId = Itinerary.InboundLegId,
@@ -51,40 +73,14 @@ app.get('/api/search', function (req, res) {
         OutboundLegId: OutboundLegId,
         PricingOptions: PricingOptions,
         priceLowest: priceLowest,
-        agent: agent
+        agent: agent,
+        leg: {
+          /* inbound:results.Legs.find(leg=>leg.Id===InboundLegId),
+            * outbound:results.Legs.find(leg=>leg.Id===OutboundLegId)*/
+        }
       };
     }).map(function (Itinerary) {
-      var outbound = void 0,
-          inbound = void 0;
-      results.Legs.map(function (leg) {
-        leg.carrierDetails = leg.Carriers.map(function (carrierId) {
-          return results.Carriers.find(function (carrier) {
-            return carrier.Id === carrierId;
-          });
-        })[0];
-
-        leg.originCity = results.Places.find(function (place) {
-          return place.Id === results.Places.find(function (place) {
-            return place.Id === leg.OriginStation;
-          }).ParentId;
-        });
-        leg.destinationCity = results.Places.find(function (place) {
-          return place.Id === results.Places.find(function (place) {
-            return place.Id === leg.DestinationStation;
-          }).ParentId;
-        });
-
-        var durationHrs = moment.duration(leg.Duration, 'hours');
-        leg.durationHrs = (durationHrs.hours() ? durationHrs.hours() + 'h ' : '') + durationHrs.hours() + 'm';
-
-        if (leg.Id === Itinerary.OutboundLegId) {
-          outbound = leg;
-        } else if (leg.Id === Itinerary.InboundLegId) {
-          inbound = leg;
-        }
-      });
-      return _extends({}, Itinerary, { leg: { inbound: inbound, outbound: outbound } });
-    }).map(function (Itinerary) {
+      console.log(Object.keys(results), results.Legs, Legs);
       Itinerary.leg.outbound.segments = Itinerary.leg.inbound.segments = [];
       results.Segments.forEach(function (segment) {
         var matchingSegmentIndex = Itinerary.leg.outbound.SegmentIds.indexOf(segment.Id);
@@ -107,6 +103,8 @@ app.get('/api/search', function (req, res) {
       travellers: results.Query.Children + results.Query.Adults,
       cabinClass: results.Query.CabinClass
     };
+    console.log(query);
+
     return res.json({ results: resultsRelational, query: query });
   }).catch(function (e) {
     var err = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development' ? { error: e.message } : 'internal server error';
