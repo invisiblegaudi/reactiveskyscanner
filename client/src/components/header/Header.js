@@ -4,12 +4,11 @@ import './Header.scss';
 class Header extends Component {
 
   render() {
-    console.log(this.props)
     return (
       <div id="results-header"><h1>
-    <span id="origin">{this.props.query.origin}</span><span id="destination"><i className="glyphicon glyphicon-arrow-right"></i>{this.props.query.destination}</span></h1>
-    <h5 id="details">{this.props.query.travellers} travellers, {this.props.query.cabinClass}</h5>
-    </div>
+      <span id="origin">{this.props.query.origin}</span><span id="destination"><i className="glyphicon glyphicon-arrow-right"></i>{this.props.query.destination}</span></h1>
+      <h5 id="details">{this.props.query.travellers} travellers, {this.props.query.cabinClass}</h5>
+      </div>
     );
     
   }

@@ -5,7 +5,7 @@ import moment from 'moment';
 class Logo extends Component {
   render() {
     return(
-      <div className="col-xs-1">
+      <div className="col-xs-2">
       <img className="airline-logo" src={this.props.src} alt={this.props.alt} />
       </div>
     );
@@ -28,7 +28,11 @@ class Journey extends Component {
     <span className="arrival time">{this.props.arrival}</span><br />
     <span className="arrival country-code">{this.props.destination}</span>
     </div>
-    <div className="col-xs-3 col-xs-offset-3 summary"><span className="duration">{this.props.duration}</span><br /><span className="flight-type">{this.props.stops.length?`Stops: ${this.props.stops.length}`:'Direct'}</span></div>
+      <div className="col-xs-3 col-xs-offset-2 summary">
+      <span className="duration">{this.props.duration}</span><br />
+      <span className="flight-type">{
+        this.props.stops.length ? `Stops: ${this.props.stops.length}`:'Direct'
+      }</span></div>
     </div>
     </div>
 
@@ -66,12 +70,12 @@ class Result extends Component {
       departure={moment(outbound.Departure).format('HH:MM')}
       arrival={moment(outbound.Arrival).format('HH:MM')}
       />
-      <div className="row bottom">
-      <div className="col-xs-4">
+      <div className="bottom row">
+      <div className="col-xs-8">
       <h3 className="price-total">£{Math.round(flight.priceLowest)}</h3>
       <h5 className="seller">{flight.agent.Name}</h5>
       </div>
-      <div className="col-xs-3 col-xs-offset-1">
+      <div className="col-xs-3">
       <button type="button" className="select">Select</button>
       </div>
       </div>
@@ -92,8 +96,6 @@ class Results extends Component {
                      this.props.flights.map((flight,i)=>{      
                        return <Result flight={flight} key={i}/>
                      }) : <span className="message">{errorNoResults}</span>
-
-    resultList = resultList.splice(0,1);
     
     return (
       <div className="Results">
@@ -106,3 +108,4 @@ class Results extends Component {
 
 
 export default Results;
+
