@@ -76,9 +76,9 @@ app.get('/api/search', (req, res) => {
       origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code,
       destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code,
       travellers:results.Query.Children+results.Query.Adults,
-      cabinClass:results.Query.CabinClass
+      cabinClass:results.Query.CabinClass.toLowerCase()
     }
-
+    
     return res.json({results:resultsRelational,query});
   }).catch(e=>{
     let err = process.env.NODE_ENV === 'test' ||

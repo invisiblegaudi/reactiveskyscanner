@@ -7,7 +7,6 @@ var url = require('url');
 var paths = require('./paths');
 
 var BACKPACK = /node_modules\/bpk-/;
-
 var homepagePath = require(paths.appPackageJson).homepage;
 var publicPath = homepagePath ? url.parse(homepagePath).pathname : '/';
 if (!publicPath.endsWith('/')) {
@@ -63,7 +62,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: [paths.appSrc, paths.appNodeModules],
+        include: [paths.appSrc, paths.appNodeModules,paths.ownNodeModules],
         // Disable autoprefixer in css-loader itself:
         // https://github.com/webpack/css-loader/issues/281
         // We already have it thanks to postcss.

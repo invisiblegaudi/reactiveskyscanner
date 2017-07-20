@@ -6,11 +6,15 @@
     padding: .7rem;
     margin-right:0;
     
-    #price-alerts .glyphicon, a {
-	color:$skyscanner-blue;
+    #price-alerts {
+	text-align:right;
+
+	i {
+	    margin-right:.2em;
+	}
     }
 
-    #price-alerts i {
-	margin-right:.2em;
+    #price-alerts, a {
+	color:$skyscanner-blue;
     }
 }

@@ -59,8 +59,9 @@ it('connects to the api and gets results', function(done) {
  	      res.should.have.status(200);
         res.body.should.not.be.empty;
         res.body.results.length.should.equal(445);
+        Object.keys(res.body.results[333]).should.deep.equal(Object.keys(mockResultsParsed[333]));
         res.body.results.should.deep.equal(mockResultsParsed);
-        res.body.query.should.deep.equal(mockQueryParsed);
+        Object.keys(res.body.query).should.deep.equal(Object.keys(mockQueryParsed));
         res.body.results[444].leg.outbound.segments.length.should.equal(3);
  	      app.close();
         done();

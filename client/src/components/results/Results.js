@@ -5,7 +5,7 @@ import moment from 'moment';
 class Logo extends Component {
   render() {
     return(
-      <div className="col-xs-2">
+      <div className="col-xs-3">
       <img className="airline-logo" src={this.props.src} alt={this.props.alt} />
       </div>
     );
@@ -28,7 +28,7 @@ class Journey extends Component {
     <span className="arrival time">{this.props.arrival}</span><br />
     <span className="arrival country-code">{this.props.destination}</span>
     </div>
-      <div className="col-xs-3 col-xs-offset-2 summary">
+      <div className="col-xs-3 col-xs-offset-1 summary">
       <span className="duration">{this.props.duration}</span><br />
       <span className="flight-type">{
         this.props.stops.length ? `Stops: ${this.props.stops.length}`:'Direct'
@@ -71,7 +71,7 @@ class Result extends Component {
       arrival={moment(outbound.Arrival).format('HH:MM')}
       />
       <div className="bottom row">
-      <div className="col-xs-8">
+      <div className="col-xs-7">
       <h3 className="price-total">£{Math.round(flight.priceLowest)}</h3>
       <h5 className="seller">{flight.agent.Name}</h5>
       </div>
