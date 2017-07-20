@@ -61,8 +61,9 @@ app.get('/api/search', (req, res) => {
     // build relational query results
     let resultsRelational = results.Itineraries.map(Itinerary=>{
       let {OutboundLegId,InboundLegId,PricingOptions} = Itinerary; // return ids for unique result keys
-      let priceLowest = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b).Price // calculate lowest price for listing
-      let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]); // associate agent with the lowest price
+      let priceLowestDetails = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b); // calculate lowest price for listing
+      let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]); //  associate agent with the lowest price
+      let priceLowest = priceLowestDetails.Price; // now get price string only
       return {
         InboundLegId,
         OutboundLegId,
@@ -81,7 +82,7 @@ app.get('/api/search', (req, res) => {
       origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code, // associate place code with query origin
       destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code, // associate place code with query origin
       travellers:results.Query.Children+results.Query.Adults, // calculate total number of travellers
-      cabinClass:results.Query.CabinClass.toLowerCase() // convert cabin class info to lowercase for output
+      cabinClass:results.Query.CabinClass.toLowerCase() // convert class to lowercase
     }
     
     return res.json({results:resultsRelational,query});
