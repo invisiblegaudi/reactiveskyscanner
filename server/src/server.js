@@ -37,28 +37,32 @@ app.get('/api/search', (req, res) => {
     ...req.query
   }).then(results => {
 
+    // add relational elements to Legs
     let Legs = results.Legs.map(leg=>{
-      leg.carrierDetails = leg.Carriers.map(carrierId=>results.Carriers.find(carrier=>carrier.Id===carrierId))[0]; 
+      
+      leg.carrierDetails = leg.Carriers.map(carrierId=>results.Carriers.find(carrier=>carrier.Id===carrierId))[0]; //associate first carrier
+      leg.originCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.OriginStation).ParentId); // associate place to origin parent id (country)  
+      leg.destinationCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.DestinationStation).ParentId); // associate place to destination parent id (country) 
 
-      leg.originCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.OriginStation).ParentId);
-      leg.destinationCity = results.Places.find(place=>place.Id===results.Places.find(place=>place.Id===leg.DestinationStation).ParentId);
-
+      // format duration time
       let durationHrs = moment.duration(leg.Duration, 'hours');
       leg.durationHrs = (durationHrs.hours()?durationHrs.hours()+'h ':'')
                       + durationHrs.minutes()+'m';
 
+      // associate segments to leg segment ids
       leg.segments = leg.SegmentIds.map(segmentId=>{
         results.Segments.find(segment=>segmentId===segment.Id);
       })
       
       return leg;
     });
-    
+
+
+    // build relational query results
     let resultsRelational = results.Itineraries.map(Itinerary=>{
-      let {OutboundLegId,InboundLegId,PricingOptions} = Itinerary;
-      let priceLowestDetails = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b);
-      let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]);
-      let priceLowest = priceLowestDetails.Price;
+      let {OutboundLegId,InboundLegId,PricingOptions} = Itinerary; // return ids for unique result keys
+      let priceLowest = PricingOptions.reduce((a,b)=>a.Price<b.Price?a:b).Price // calculate lowest price for listing
+      let agent = results.Agents.find(agent=>agent.Id==priceLowestDetails.Agents[0]); // associate agent with the lowest price
       return {
         InboundLegId,
         OutboundLegId,
@@ -66,17 +70,18 @@ app.get('/api/search', (req, res) => {
         priceLowest,
         agent,
         leg:{
-          inbound:Legs.find(leg=>leg.Id===InboundLegId),
-          outbound:Legs.find(leg=>leg.Id===OutboundLegId)
+          inbound:Legs.find(leg=>leg.Id===InboundLegId), // associate leg for inbound journey 
+          outbound:Legs.find(leg=>leg.Id===OutboundLegId) // associate leg for outbound journey
         }
       };
     })
-    
+
+    // return query for search results header
     let query = {
-      origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code,
-      destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code,
-      travellers:results.Query.Children+results.Query.Adults,
-      cabinClass:results.Query.CabinClass.toLowerCase()
+      origin:results.Places.find(place=>place.Id===parseInt(results.Query.OriginPlace)).Code, // associate place code with query origin
+      destination:results.Places.find(place=>place.Id===parseInt(results.Query.DestinationPlace)).Code, // associate place code with query origin
+      travellers:results.Query.Children+results.Query.Adults, // calculate total number of travellers
+      cabinClass:results.Query.CabinClass.toLowerCase() // convert cabin class info to lowercase for output
     }
     
     return res.json({results:resultsRelational,query});
