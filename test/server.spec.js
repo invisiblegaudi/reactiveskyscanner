@@ -4,7 +4,9 @@ const chai = require('chai'),
       fs = require('fs'),
       moment = require('moment'),
       sinon = require('sinon'),
-      mockResults = require('./__mocks/results.json');
+      mockResults = require('./__mocks/results.json'),
+      mockQueryParsed = require('./__mocks/searchQuery.json'),
+      mockResultsParsed = require('./__mocks/resultsParsed.json');
 
 
 process.env.NODE_ENV = 'test';
@@ -56,8 +58,10 @@ it('connects to the api and gets results', function(done) {
  	    .then(res=> {
  	      res.should.have.status(200);
         res.body.should.not.be.empty;
-        res.body.length.should.equal(445);
-        res.body[444].leg.outbound.segments.length.should.equal(6);
+        res.body.results.length.should.equal(445);
+        res.body.results.should.deep.equal(mockResultsParsed);
+        res.body.query.should.deep.equal(mockQueryParsed);
+        res.body.results[444].leg.outbound.segments.length.should.equal(3);
  	      app.close();
         done();
  	    })

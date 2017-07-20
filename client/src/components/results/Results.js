@@ -67,11 +67,13 @@ class Result extends Component {
       arrival={moment(outbound.Arrival).format('HH:MM')}
       />
       <div className="row bottom">
-      <div className="col-xs-6">
+      <div className="col-xs-4">
       <h3 className="price-total">£{Math.round(flight.priceLowest)}</h3>
       <h5 className="seller">{flight.agent.Name}</h5>
       </div>
-      <div className="col-xs-3  col-xs-offset-2 "><button type="button" className="select">Select</button></div>
+      <div className="col-xs-3 col-xs-offset-1">
+      <button type="button" className="select">Select</button>
+      </div>
       </div>
       </div>
     );  
@@ -90,6 +92,8 @@ class Results extends Component {
                      this.props.flights.map((flight,i)=>{      
                        return <Result flight={flight} key={i}/>
                      }) : <span className="message">{errorNoResults}</span>
+
+    resultList = resultList.splice(0,1);
     
     return (
       <div className="Results">
