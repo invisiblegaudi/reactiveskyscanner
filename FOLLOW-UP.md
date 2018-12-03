@@ -24,3 +24,38 @@
 
 ### Q) How did you find the test overall? If you have any suggestions on how we can improve the test or our API, we'd love to hear them.
 > The test was nice and straightforward, skyscanner is a very familiar UI! My comment on all tests is that it would be better to have a running open source project you could add to rather then build something never to be used, its such a waste of time for unsuccessful applicants! If your api could spit out properties starting with a lowercase char that'd be nice! I hated mixing them into my results JSON but for speed and conciseness' sake I had to leave them in. - Thanks! John.
+
+- technical
+- culturla
+- how the web works
+- algorithm
+- scalablility
+- examples of collaboration
+  - challenges
+  - mistakes
+  - 
+- teamwork skills
+- teaching
+- continous improvement
+- have examples from projects
+ - situations of conflict
+ - challenges
+ - mistakes
+- breaking down barriers
+- freedom to use own skills to solve problems
+- scalable
+- automonmy
+
+- frontentd 
+- reactjs
+- nodejs
+- managnig projects
+- single page apps
+- html, css
+- backend, python, java
+- deployment
+- complex project
+- can ask what project
+
+- cracking the coding interview
+- recommend ideas, improvements to the application
