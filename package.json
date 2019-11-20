@@ -39,7 +39,7 @@
     "global-tunnel": "^1.2.0",
     "gzip-size": "3.0.0",
     "html-webpack-plugin": "2.22.0",
-    "http-proxy-agent": "^1.0.0",
+    "http-proxy-agent": "^2.1.0",
     "json-loader": "0.5.4",
     "mocha": "^3.4.2",
     "node-sass": "^4.5.1",
