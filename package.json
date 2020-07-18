@@ -63,7 +63,7 @@
     "bpk-stylesheets": "^3.2.14",
     "es6-promise": "^3.2.1",
     "isomorphic-fetch": "^2.2.1",
-    "lodash": "^4.15.0",
+    "lodash": "^4.17.19",
     "moment": "^2.18.1",
     "react": "^15.2.1",
     "react-bootstrap": "^0.31.0",
